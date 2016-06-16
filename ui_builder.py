@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 
-
 import copy
 import Tkinter
 
 
+# A control to change widgets to red if they have been changed
 def spin_changed(ui_element):
     ui_element['control'].config(bg='red')
 
 
+# A control to change widget to green after being called
 def spin_key_press(event, ui_element):
     print("pressed: %s" % event.keycode)
     if event.keycode & 0xFF in (13, 36):
@@ -20,6 +21,7 @@ def spin_key_press(event, ui_element):
             ui_element['control'].config(bg='green')
 
 
+# A control to change a value if a button has been pressed
 def check_toggled(ui_element):
     val = ui_element['variable'].get()
     # logger.info("{} : {}".format(ui_element['spec']['name'], val))
