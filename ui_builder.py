@@ -111,8 +111,8 @@ def build_ui(spec, root=None):
         ui[k]['label'] = label
         label.pack(side=Tkinter.LEFT)
         if 'text' not in s:
-            control, ui, v = create_widget_control(s['control'], frame, k, name,
-                                            s, ui, v)
+            control, ui, v = create_widget_control(s['control'], frame, k,
+                                                   name, s, ui, v)
             control.pack(side=Tkinter.LEFT)
         frame.pack(fill=Tkinter.BOTH, side=Tkinter.TOP)
     ui['_root'] = root
