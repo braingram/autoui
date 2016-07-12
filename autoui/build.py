@@ -117,7 +117,7 @@ def build_ui(spec, root=None, update_interval=100, on_update=None):
             control, ui, v = create_control(s['control'], frame, k, name,
                                             s, ui, v)
             control.pack(side=Tkinter.LEFT)
-        frame.pack(fill=Tkinter.BOTH, side=Tkinter.LEFT)
+        frame.pack(fill=Tkinter.BOTH, side=Tkinter.TOP)
     ui['_root'] = root
     if update_interval is not None:
         if on_update is None:
