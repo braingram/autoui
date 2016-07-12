@@ -13,7 +13,7 @@ def spin_changed(ui_element):
 
 
 def spin_key_press(event, ui_element):
-    #print("pressed: %s" % event.keycode)
+    # print("pressed: %s" % event.keycode)
     if event.keycode & 0xFF in (13, 36):
         val = ui_element['variable'].get()
         if (val >= ui_element['spec']['min']) and \
@@ -208,7 +208,8 @@ def build_split_ui(spec, root=None, update_interval=100,
             control, ui, v = create_control(s['control'], frame, k, name,
                                             s, ui, v)
             if (counter % 2) == 0:
-                control.grid(row=left_counter, column=0, sticky=Tkinter.W+Tkinter.E)
+                control.grid(row=left_counter, column=0,
+                             sticky=Tkinter.W+Tkinter.E)
             else:
                 control.grid(row=right_counter, column=2,
                              sticky=Tkinter.W+Tkinter.E)
@@ -235,9 +236,6 @@ def build_split_ui(spec, root=None, update_interval=100,
         root.after(update_interval, update)
 
     return ui
-
-
-
 
 
 def run():
