@@ -90,6 +90,7 @@ def create_control(control_type, frame, k, name, s, ui, v):
             var = None
         control = ttk.Progressbar(frame, orient=orientation, length=length,
                                   mode=mode, maximum=maximum, variable=var)
+        ui[k]['control'] = control
         return control, ui, v
     else:
         raise Exception("Unknown Control: {}".format(s['control']))
