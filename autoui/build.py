@@ -3,6 +3,7 @@
 import copy
 import logging
 import Tkinter
+from Tkinter import ttk
 
 
 logger = logging.getLogger(__name__)
@@ -65,6 +66,25 @@ def create_control(control_type, frame, k, name, s, ui, v):
         control = Tkinter.Button(
             frame, textvariable=v, command=s['command'])
         ui[k]['control'] = control
+        return control, ui, v
+    elif control_type == ttk.Progressbar:
+        if 'orientation' not in s:
+            orientation = 'horizontal'
+        else:
+            orientation = s['orientation']
+        if 'length' not in s:
+            length = 100
+        else:
+            length = s['length']
+        if 'mode' not in s:
+            mode = 'determinate'
+        else:
+            mode = s['mode']
+        control = ttk.Progressbar(frame, orientation, length, mode)
+        if 'max' in s:
+            control['maximum'] = int(s['max'])
+        if 'variable' in s:
+            control['variable'] = s['variable']
         return control, ui, v
     else:
         raise Exception("Unknown Control: {}".format(s['control']))
