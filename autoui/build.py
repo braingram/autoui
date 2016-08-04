@@ -264,5 +264,92 @@ def build_split_ui(spec, root=None, update_interval=100,
     return ui
 
 
+def build_image_ui(spec, root=None, update_interval=100,
+                   on_update=None, im_side=None):
+    """Auto-magically construct a tkinter ui
+    spec = dictionary with
+        keys = attribute names
+        values = attribute spec = dictionary with
+            key : value
+            type : tkinter variable type
+            value : optional default value
+            control : tkinter control type
+            min : optional min value
+            max : optional max value
+            increment : optional increment (for spin boxes)
+            setter : setter function
+            getter : getter function
+
+    for each item in the spec a variable will be created
+    """
+    """
+    When setting up the image ui the image will be place on the right
+    side. For proper ui building, image widged must be labeled 'image'."""
+    if root is None:
+        root = Tkinter.Tk()
+    widget_counter = 0
+    frame = Tkinter.Frame(root)
+    number_of_widgets = len(spec) - 1
+    for r in range(number_of_widgets):
+        frame.rowconfigure(r, pad=3)
+    frame.columnconfigure(0, pad=3)
+    frame.columnconfigure(1, pad=3)
+    frame.columnconfigure(2, pad=3)
+    frame.columnconfigure(3, pad=3)
+    ui = {}
+    for (k, s) in spec:
+        ui[k] = {}
+        ui[k]['spec'] = copy.deepcopy(s)
+        name = s.get('name', k)
+        ui[k]['spec']['name'] = name
+        # 1) create variable for attribute
+        v = s['type']()
+        ui[k]['variable'] = v
+        # 2) (optional) set default value
+        if 'value' in s:
+            v.set(s['value'])
+        # 3) create control
+        # 5) define callback function
+        ui[k]['frame'] = frame
+        if 'text' in s:
+            label = Tkinter.Label(frame, text=s['text'], fg="black",
+                                  justify=Tkinter.LEFT, relief=Tkinter.RIDGE,
+                                  wraplength=400)
+        else:
+            label = Tkinter.Label(frame, text=name, fg='blue')
+        ui[k]['label'] = label
+        if ui[k]['spec']['name'] != 'image':
+            label.grid(row=widget_counter, column=1, sticky=Tkinter.W+Tkinter.E)
+        if 'text' not in s:
+            control, ui, v = create_control(s['control'], frame, k, name,
+                                            s, ui, v)
+            if ui[k]['spec']['name'] != 'image':
+                control.grid(row=widget_counter, column=0,
+                             sticky=Tkinter.W+Tkinter.E)
+            else:
+                control.grid(row=0, rowspan=4, column=3, columnspan=2,
+                             sticky=Tkinter.W+Tkinter.E)
+        if ui[k]['spec']['name'] != 'image':
+            widget_counter += 1
+        frame.pack(fill=Tkinter.BOTH, side=Tkinter.LEFT)
+    ui['_root'] = root
+    if update_interval is not None:
+        if on_update is None:
+            on_update = lambda: None
+
+        def update():
+            on_update()
+            for k in ui:
+                if k[0] == '_':
+                    continue
+                if ui[k]['spec'].get('update', False):
+                    ui[k]['variable'].set(ui[k]['spec']['getter']())
+            root.after(update_interval, update)
+
+        root.after(update_interval, update)
+
+    return ui
+
+
 def run():
     Tkinter.mainloop()
