@@ -290,6 +290,10 @@ def build_image_ui(spec, root=None, update_interval=100,
     widget_counter = 0
     frame = Tkinter.Frame(root)
     number_of_widgets = len(spec) - 1
+    if number_of_widgets % 2 == 0:
+        rowspan = number_of_widgets
+    else:
+        rowspan = number_of_widgets + 1
     for r in range(number_of_widgets):
         frame.rowconfigure(r, pad=3)
     frame.columnconfigure(0, pad=3)
@@ -327,7 +331,7 @@ def build_image_ui(spec, root=None, update_interval=100,
                 control.grid(row=widget_counter, column=0,
                              sticky=Tkinter.W+Tkinter.E)
             else:
-                control.grid(row=0, rowspan=4, column=3, columnspan=2,
+                control.grid(row=0, rowspan=rowspan, column=3, columnspan=2,
                              sticky=Tkinter.W+Tkinter.E)
         if ui[k]['spec']['name'] != 'image':
             widget_counter += 1
