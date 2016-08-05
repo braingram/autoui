@@ -67,6 +67,10 @@ def create_control(control_type, frame, k, name, s, ui, v):
             frame, textvariable=v, command=s['command'])
         ui[k]['control'] = control
         return control, ui, v
+    elif control_type == Tkinter.Canvas:
+        control = Tkinter.Canvas(frame)
+        ui[k]['control'] = control
+        return control, ui, v
     elif control_type == ttk.Progressbar:
         if 'orientation' not in s:
             orientation = 'horizontal'
@@ -316,14 +320,23 @@ def build_image_ui(spec, root=None, update_interval=100,
         # 5) define callback function
         ui[k]['frame'] = frame
         if 'text' in s:
+            if 'wraplength' in s:
+                wraplength = s['wraplength']
+            else:
+                wraplength = 400
             label = Tkinter.Label(frame, text=s['text'], fg="black",
                                   justify=Tkinter.LEFT, relief=Tkinter.RIDGE,
-                                  wraplength=400)
+                                  wraplength=wraplength)
         else:
             label = Tkinter.Label(frame, text=name, fg='blue')
         ui[k]['label'] = label
         if ui[k]['spec']['name'] != 'image':
-            label.grid(row=widget_counter, column=1, sticky=Tkinter.W+Tkinter.E)
+            if 'text' in s:
+                label.grid(row=widget_counter, column=0, columnspan=2,
+                           sticky=Tkinter.W+Tkinter.E)
+            else:
+                label.grid(row=widget_counter, column=1,
+                           sticky=Tkinter.W+Tkinter.E)
         if 'text' not in s:
             control, ui, v = create_control(s['control'], frame, k, name,
                                             s, ui, v)
