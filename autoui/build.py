@@ -96,6 +96,27 @@ def create_control(control_type, frame, k, name, s, ui, v):
                                   mode=mode, maximum=maximum, variable=var)
         ui[k]['control'] = control
         return control, ui, v
+    elif control_type == Tkinter.Scale:
+        if 'start' in s:
+            start = s['start']
+        else:
+            start = 0
+        if 'end' in s:
+            end = s['end']
+        else:
+            end = 100
+        if 'orientation' in s:
+            orientation = s['orientation']
+        else:
+            orientation = Tkinter.HORIZONTAL
+        if 'resolution' in s:
+            resolution = s['resolution']
+        else:
+            resolution = -1  # This disables rounding to the nearest int
+        control = Tkinter.Scale(frame, from_=start, to=end, orient=orientation,
+                                resolution=resolution)
+        ui[k]['control'] = control
+        return control, ui, v
     else:
         raise Exception("Unknown Control: {}".format(s['control']))
 
