@@ -117,6 +117,14 @@ def create_control(control_type, frame, k, name, s, ui, v):
                                 resolution=resolution)
         ui[k]['control'] = control
         return control, ui, v
+    elif control_type == Tkinter.Entry:
+        if 'variable' in s:
+            var = s['variable']
+        else:
+            var = None
+        control = Tkinter.Entry(frame, textvariable=var)
+        ui[k]['control'] = control
+        return control, ui, v
     else:
         raise Exception("Unknown Control: {}".format(s['control']))
 
